@@ -18,10 +18,6 @@ api = Api(app=flask_app,
 
 chrome_options = ChromeOptions()
 chrome_options.add_argument("--headless")
-driver = webdriver.Remote(
-    command_executor='http://0.0.0.0:4444/wd/hub',
-    options=chrome_options,
-)
 
 keywords = KeywordsLoader('./bright_keywords')
 mask_creator = MaskCreator('bigram_model.pkl', keywords.nouns, keywords.nouns_actors)
@@ -57,23 +53,28 @@ class DetectedExercise(Resource):
         if data['language'] not in language_variants:
             return Response(f'Topic must be one of {language_variants}', status=404)
 
+        driver = webdriver.Remote(
+            command_executor='http://0.0.0.0:4444/wd/hub',
+            options=chrome_options,
+        )
+
         if data['language'] == 'en':
-            data['text'] = translate_text(data['text'], 'en-ru')
+            data['text'] = translate_text(driver, data['text'], 'en-ru')
 
         category_from = np.argmax(categories_eng == data['original_topic'])
         category_to = np.argmax(categories_eng == data['topic'])
         data['predict'] = convert(mask_creator, keywords, data['text'], category_from, category_to, True, False)[0]
 
         if data['language'] == 'en':
-            data['predict'] = translate_text(data['predict'], 'ru-en')
+            data['predict'] = translate_text(driver, data['predict'], 'ru-en')
         else:
-            eng_predict = translate_text(data['predict'], 'ru-en')
-            data['predict'] = translate_text(eng_predict, 'en-ru')
+            eng_predict = translate_text(driver, data['predict'], 'ru-en')
+            data['predict'] = translate_text(driver, eng_predict, 'en-ru')
 
         return {'text': data['predict']}
 
 
-def translate_text(text, direction='ru-en'):
+def translate_text(driver, text, direction='ru-en'):
     time.sleep(0.2)
     while True:
         try:
