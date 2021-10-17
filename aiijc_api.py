@@ -1,4 +1,6 @@
 import werkzeug
+werkzeug.cached_property = werkzeug.utils.cached_property
+
 import threading
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
@@ -7,7 +9,6 @@ import flask
 import time
 from flask_restplus import Api, Resource, fields
 from utils import *
-werkzeug.cached_property = werkzeug.utils.cached_property
 
 flask_app = Flask(__name__)
 api = Api(app=flask_app,
