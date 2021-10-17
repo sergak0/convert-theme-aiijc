@@ -35,6 +35,9 @@ request_model = api.model('Model',
                            'topic': fields.String(required=True,
                                                   description='The topic you want to translate the text to.\n'
                                                               f'One of {str(categories_eng)}'),
+                           'original_topic': fields.String(required=True,
+                                                  description='The topic you want to translate the text to.\n'
+                                                              f'One of {str(categories_eng)}'),
                            'language': fields.String(required=False,
                                                      description="The language in which the text is written.\n"
                                                                  f'One of {str(language_variants)}')
