@@ -75,8 +75,12 @@ class DetectedExercise(Resource):
 
 def translate_text(text, direction='ru-en'):
     time.sleep(0.2)
-    driver.get(f"https://www.m-translate.ru/translator/text#text=test&direction=ru-en")
-
+    while True:
+        try:
+            driver.get(f"https://www.m-translate.ru/translator/text#text=test&direction=ru-en")
+            break
+        except:
+            continue
     from_lang = driver.find_element_by_id("from_span").text.lower()
     if from_lang != direction[:direction.find('-')]:
         driver.find_element_by_id("Small_btns").click()
