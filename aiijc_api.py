@@ -46,7 +46,7 @@ class DetectedExercise(Resource):
     @api.expect(request_model)
     def post(self):
         data = flask.request.json
-
+        print(data)
         if data['topic'] not in categories_eng:
             return Response(f'Topic must be one of {categories_eng}', status=404)
 
