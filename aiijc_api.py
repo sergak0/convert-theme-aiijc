@@ -71,6 +71,7 @@ class DetectedExercise(Resource):
             eng_predict = translate_text(driver, data['predict'], 'ru-en')
             data['predict'] = translate_text(driver, eng_predict, 'en-ru')
 
+        driver.close()
         return {'text': data['predict']}
 
 
