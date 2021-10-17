@@ -62,7 +62,7 @@ class DetectedExercise(Resource):
 
         category_from = np.argmax(categories_eng == data['original_topic'])
         category_to = np.argmax(categories_eng == data['topic'])
-        data['predict'] = convert(mask_creator, keywords, data['text'], category_from, category_to, True, False)
+        data['predict'] = convert(mask_creator, keywords, data['text'], category_from, category_to, True, False)[0]
 
         if data['language'] == 'en':
             data['predict'] = translate_text(data['predict'], 'ru-en')
